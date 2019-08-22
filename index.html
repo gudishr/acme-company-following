@@ -25,6 +25,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="root"></div>
     <script type="text/babel">
@@ -38,7 +39,7 @@
         const fetchUser = async ()=> {
             const storage = window.localStorage;
             const userId = storage.getItem('userId');
-            
+
             if(userId){
                 try {
                     return (await axios.get(`${API}/users/detail/${userId}`)).data;
@@ -48,7 +49,7 @@
                     return fetchUser();
                 }
             }
-        
+
             const user = (await axios.get(`${API}/users/random`)).data;
                 storage.setItem('userId', user.id);
                 console.log(user)
@@ -78,11 +79,20 @@
                 return (
                     <ul>
                         {companies.map(comp => {
+                            let classy = ""
+                            let rate = ''
+                            followed.forEach(target => {
+                                //console.log(target.rating)
+                                if(target.companyId === comp.id){
+                                    classy = "follo"
+                                    rate = target.rating
+                                }
+                            });
                             return( 
-                                <li key = { comp.id } class = "follo" > {comp.name}
+                                <li key = { comp.id } className = {classy} > {comp.name}
                                     <select>
                                         {['',1,2,3,4,5].map(num => {
-                                            return(<option value={num}> {num} </option>)
+                                            return(<option value={num} > {num} </option>)
                                         })}
                                     </select>
                                 </li>
