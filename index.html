@@ -59,24 +59,27 @@
             constructor() {
                 super()
                 this.state = {
+                    followed: [],
                     companies: []
                 }
             }
 
             async componentDidMount() {
                 const responseC = await axios.get(API + '/companies');
-                this.setState({companies: responseC.data});
+                const user = await fetchUser()
+                const followed = (await axios.get(API + '/users/' + user.id + '/followingcompanies')).data
+                this.setState({followed: followed, companies: responseC.data});
                 console.log(this.state)
             }
 
             render() {
-                const { companies } = this.state
+                const { companies, followed } = this.state
                 console.log(companies)
                 return (
                     <ul>
                         {companies.map(comp => {
                             return( 
-                                <li key = { comp.id }> {comp.name}
+                                <li key = { comp.id } class = "follo" > {comp.name}
                                     <select>
                                         {['',1,2,3,4,5].map(num => {
                                             return(<option value={num}> {num} </option>)
