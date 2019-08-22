@@ -20,7 +20,8 @@
 
         const fetchUser = async ()=> {
         const storage = window.localStorage;
-        const userId = storage.getItem('userId'); 
+        const userId = storage.getItem('userId');
+        
         if(userId){
             try {
             return (await axios.get(`${API}/users/detail/${userId}`)).data;
@@ -30,6 +31,7 @@
             return fetchUser();
             }
         }
+
         const user = (await axios.get(`${API}/users/random`)).data;
         storage.setItem('userId', user.id);
         return  user;
@@ -39,13 +41,24 @@
             constructor() {
                 super()
                 this.state = {
-                    companies: ["ABC Ltd"]
+                    companies: []
                 }
+            }
+
+            async componentDidMount() {
+                const responseC = await axios.get(API + '/companies');
+                this.setState({companies: responseC.data});
+                console.log(this.state)
             }
 
             render() {
                 const { companies } = this.state
                 console.log(companies)
+                return (
+                    <li>
+                        
+                    </li>
+                )
             }
         }
 
